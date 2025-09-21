@@ -11,22 +11,28 @@ app = Flask(
     static_folder=os.path.join(os.path.dirname(__file__), 'static')
 )
 app.secret_key = "208itkvant208rzhd"
+
 VERSION_FILE = pathlib.Path(__file__).parent / ".version"
 try:
     with open(VERSION_FILE) as f:
         app.config["APP_VERSION"] = f.read().strip()
 except FileNotFoundError:
     app.config["APP_VERSION"] = "develop"
+
 logging.basicConfig(filename='web_app/logs/main.log', level=logging.DEBUG)
+
 db = PostgresqlDatabase(
     "it_kvant",
     user="postgres",
-    password="any_password",
+    password="kjkszpj",
     host="localhost",
     port=5432
 )
-db.connect()
 
-import web_app.routes
-import web_app.helpers
-import web_app.models
+from .models import *
+from .routes import *
+from .helpers import *
+
+def init_db():
+    if db.is_closed():
+        db.connect()

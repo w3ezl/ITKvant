@@ -1,0 +1,35 @@
+@import url("jetbrains_fonts.css");
+
+body {
+	background: #101214;
+	margin: 0;
+	padding: 0;
+	color: #fff;
+	font-family: "JetBrains Mono";
+}
+
+.main_auth {
+	position: absolute;
+	width: 500px;
+	height: 400px;
+	overflow: hidden;
+
+	left: calc(50% - 250px);
+	top: calc(50% - 200px);
+
+	background: #30364210;
+	border-radius: 10px;
+}
+
+.main_auth .kvant_logo {
+	position: absolute;
+	width: 200px;
+	height: 200px;
+	right: -50px;
+	bottom: -50px;
+	opacity: 0.01;
+}
+
+.main_auth h1 {
+	text-align: center;
+}

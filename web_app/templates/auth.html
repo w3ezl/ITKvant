@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Авторизация</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_versioned('style/main.css') }}">
+</head>
+<body>
+    <div class="main_auth">
+        <img class="kvant_logo" src="{{ static_versioned('img/it_kvant_logo_white.png') }}">
+        <h1 id="type"></h1>
+    </div>
+
+    <script>
+        const text = "Авторизация";
+        const element = document.getElementById("type");
+        let i = 0;
+
+        function typeEffect() {
+          if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typeEffect, 70);
+          }
+        }
+
+        typeEffect();
+    </script>
+</body>
+</html>
