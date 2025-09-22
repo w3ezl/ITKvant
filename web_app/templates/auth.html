@@ -9,12 +9,25 @@
 <body>
     <div class="main_auth">
         <img class="kvant_logo" src="{{ static_versioned('img/it_kvant_logo_white.png') }}">
-        <h1 id="type"></h1>
+        <h1 id="type">Авторизация</h1>
+        <form method="post">
+            <input type="text" name="login" placeholder="Логин">
+            <input type="password" name="password" placeholder="Пароль">
+            <input type="submit" value="Войти" class="auth_btn">
+        </form>
+        <div class="change_page">
+            <p>
+                Если у вас еще нет профиля, попросите создать его у вашего наставника.
+            </p>
+        </div>
+        {% if get_flashed_messages() %}
+        <div class="flash">{{ get_flashed_messages()[0] }}</div>
+        {% endif %}
     </div>
 
     <script>
-        const text = "Авторизация";
         const element = document.getElementById("type");
+        const text = element.innerHTML;
         let i = 0;
 
         function typeEffect() {
@@ -24,7 +37,7 @@
             setTimeout(typeEffect, 70);
           }
         }
-
+        element.innerHTML = ""
         typeEffect();
     </script>
 </body>

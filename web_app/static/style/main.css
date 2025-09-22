@@ -8,17 +8,114 @@ body {
 	font-family: "JetBrains Mono";
 }
 
+input {
+	outline: none;
+	font-family: "JetBrains Mono";
+	border: 0;
+}
+
 .main_auth {
 	position: absolute;
 	width: 500px;
-	height: 400px;
+	height: 270px;
 	overflow: hidden;
 
 	left: calc(50% - 250px);
-	top: calc(50% - 200px);
+	top: calc(50% - 135px);
 
 	background: #30364210;
 	border-radius: 10px;
+}
+
+.main_auth.reg {
+	height: 540px;
+	top: calc(50% - 270px);
+}
+
+.main_auth label {
+	font-size: 11px;
+	color: #fff7;
+	margin: 5px 0;
+	text-align: center;
+}
+
+.main_auth.reg .avatar {
+	height: 100px;
+	width: 100px;
+	border-radius: 50%;
+	transition: background 0.3s;
+}
+
+.main_auth.reg .avatar:hover {
+	background: #fff2;
+	cursor: pointer;
+}
+
+.main_auth.reg .col2_reg {
+	width: 80%;
+	margin: 0 10% 10px 10%;
+	display: flex;
+}
+
+.main_auth.reg .gender_select {
+	display: flex;
+	justify-content: center;
+	height: 40px;
+	width: 100px;
+}
+
+.main_auth.reg .gender_select svg {
+	height: 30px;
+}
+
+.main_auth.reg .gender_select div {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background: #fff1;
+}
+
+.main_auth.reg .gender_select .male_block {
+	border-radius: 10px 0 0 10px; 
+}
+
+.main_auth.reg .gender_select .female_block {
+	border-radius: 0 10px 10px 0; 
+}
+
+.main_auth.reg .gender_select div:hover {
+	background: #fff2;
+	cursor: pointer;
+}
+
+
+
+.main_auth.reg .gender_select svg .active {
+	fill: #36b;
+}
+
+.main_auth.reg .col2_reg .col_reg {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.main_auth.reg .col2_reg .col_reg p {
+	width: 300px;
+	font-size: 12px;
+	margin: 0 0 0 10%;
+	color: #fff7;
+}
+
+.main_auth.reg .col2_reg .col_reg p span {
+	color: #fff;
+}
+
+.main_auth.reg .col2_reg .col_reg input {
+	margin: 10px 0 10px 5%;
+	width: calc(300px - 5%);
 }
 
 .main_auth .kvant_logo {
@@ -32,4 +129,81 @@ body {
 
 .main_auth h1 {
 	text-align: center;
+	height: 43px;
+}
+
+.main_auth input {
+	position: relative;
+	width: 80%;
+	margin: 10px 10%;
+	height: 25px;
+	font-size: 16px;
+	border-radius: 10px;
+	text-align: center;
+	background: #fff2;
+	color: #fff;
+	transition: background 0.1s;
+}
+
+.main_auth input:focus {
+	background: #fff3;
+}
+
+.main_auth .auth_btn {
+	position: absolute;
+	width: 30%;
+	height: 40px;
+	right: 0;
+	background: #36b;
+	transition: background 0.3s;
+}
+
+.main_auth .auth_btn:hover {
+	cursor: pointer;
+	background: #38e;
+}
+
+.main_auth .change_page {
+	position: absolute;
+	width: 50%;
+	left: 10%;
+	margin-top: 10px;
+}
+
+.main_auth .change_page p {
+	margin: 0 10px 0 0;
+	font-size: 11px;
+	color: #fff7;
+}
+
+.main_auth .flash {
+	position: absolute;
+	color: #d22;
+	height: 25px;
+	width: 100%;
+	bottom: 0;
+	text-align: center;
+	font-size: 12px;
+	animation: flash_error 0.5s;
+}
+
+@keyframes flash_error {
+	0% {
+		transform: translateX(3px);
+	}
+	20% {
+		transform: translateX(-6px);
+	}
+	40% {
+		transform: translateX(6px);
+	}
+	60% {
+		transform: translateX(-6px);
+	}
+	80% {
+		transform: translateX(6px);
+	}
+	100% {
+		transform: translateX(-3px);
+	}
 }
