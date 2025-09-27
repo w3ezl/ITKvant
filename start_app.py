@@ -5,8 +5,19 @@ from werkzeug.security import generate_password_hash
 from web_app import app, db, models, User, Achievement
 
 db.connect()
-model_classes = [getattr(models, name) for name in models.__all__ if name != "BaseModel"]
-db.create_tables(model_classes)
+
+tables = [
+    models.Group,
+    models.User,
+    models.Project,
+    models.Achievement,
+    models.RegistrationLink,
+    models.Task,
+    models.UserAchievement,
+    models.UserTask
+]
+
+db.create_tables(tables, safe=True)
 
 # Создание учителя, если нет
 if not User.select().where(User.login == "w3ezl").exists():
