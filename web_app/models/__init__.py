@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from peewee import Model, SQL, DateTimeField
+from peewee import Model, SQL, DateTimeField, ForeignKeyField
 from web_app import db
 
 class BaseModel(Model):
@@ -21,6 +21,8 @@ from web_app.models.registration_link import RegistrationLinks
 from web_app.models.task import Tasks
 from web_app.models.user_achievement import UserAchievements
 from web_app.models.user_task import UserTasks
+
+Groups.teacher = ForeignKeyField(Users, backref='teaches_groups', column_name='teacher_id', null=False)
 
 __all__ = [
     "BaseModel",
