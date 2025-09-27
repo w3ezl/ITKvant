@@ -1,0 +1,37 @@
+<div class="title">
+    <h1>Профили</h1>
+</div>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Логин</th>
+        <th>Группа</th>
+        <th>Учитель?</th>
+        <th>Рейтинг</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Отчество</th>
+        <th>Пол</th>
+        <th>Статус</th>
+        <th>Проект</th>
+        <th colspan="2">Действия</th>
+    </tr>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td><a href="/profile/{{ user.id }}">{{ user.login }}</a></td>
+            <td>{{ user.group.name }}</td>
+            <td>{{ "Да" if user.is_teacher else "Нет" }}</td>
+            <td>{{ user.rating_points }}</td>
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user.father_name }}</td>
+            <td>{{ "М" if user.gender == "male" else "Ж" }}</td>
+            <td>{{ user.status }}</td>
+            <td>{{ user.project.name }}</td>
+            <td><a href="/profile/{{ user.id }}">Редактировать</a></td>
+            <td><a href="/profile/{{ user.id }}">Удалить</a></td>
+        </tr>
+    {% endfor %}
+</table>

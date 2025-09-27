@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель управления</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_versioned('style/main.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="header_btns main_menu_btns">
+            <a href="/dashboard">Панель управления</a>
+        </div>
+        <a href="/profile/{{ current_user.id }}">
+            <div class="header_profile">
+                <img src="{{ static_versioned('uploads/avatars/'+current_user.id|string+'.png') }}">
+                <p>
+                    {{ current_user.last_name }}<br>
+                    {{ current_user.first_name }}
+                </p>
+            </div>
+        </a>
+        <div class="profile_menu">
+            <a href="/logout">Выйти</a>
+        </div>
+
+        <script>
+        $(function() {
+            let $profile = $(".header_profile");
+            let $menu = $(".profile_menu");
+            let timeout;
+
+            function showMenu() {
+                clearTimeout(timeout);
+                $menu.stop(true, true).fadeIn(200);
+            }
+
+            function hideMenu() {
+                timeout = setTimeout(function() {
+                    $menu.stop(true, true).fadeOut(200);
+                }, 200);
+            }
+
+            $profile.on("mouseenter", showMenu);
+            $profile.on("mouseleave", hideMenu);
+
+            $menu.on("mouseenter", showMenu);
+            $menu.on("mouseleave", hideMenu);
+        });
+        </script>
+    </div>
+    <div class="main">
+        <div class="main_profile">
+            <div class="flex_container">
+                <img src="{{ static_versioned('uploads/avatars/'+user.id|string+'.png') }}">
+                <div class="info">
+                    {{ user.last_name }} {{ user.first_name }}<br>
+                    <span class="little">{{ "Pusto" if not user.status else user.status }}<br>
+                    {% if not user.is_teacher %}
+                    Группа: <span class="white">{{ user.group.name }}</span> <br>
+                    Наставник: <a href="/profile/{{ user.group.teacher.id}}"><span class="white">{{ user.group.teacher.first_name }} {{ user.group.teacher.father_name }}</span></a><br>
+                    {% endif %}
+                    </span>
+                </div>
+                {% if not user.is_teacher %}
+                <div class="rating" id="rating{{ place }}">
+                    Место: {{ place }} <br>
+                    Баллы рейтинга: {{ user.rating_points }}
+                </div>
+                {% endif %}
+            </div>
+            <h2>Достижения</h2>
+            <div class="achiv_container">
+                {% for achiv in user.achievements %}
+                <div class="achiv_card">
+                    <img src="{{ static_versioned('uploads/achiv_icons/'+achiv.achievement.id|string+'.png') }}">
+                    <div class="info">
+                        <span class="title">{{ achiv.achievement.title }}</span>
+                        <span class="desc">{{ achiv.achievement.description }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script>
+    function showToast(message, duration=2000) {
+        const $toast = $("#toast");
+        $toast.text(message).fadeIn(200);
+
+        setTimeout(() => {
+            $toast.fadeOut(200);
+        }, duration);
+    }
+    </script>
+</body>
+</html>

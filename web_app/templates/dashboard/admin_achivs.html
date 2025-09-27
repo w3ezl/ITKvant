@@ -1,0 +1,25 @@
+<div class="title">
+    <h1>Ачивки</h1>
+    <a href="/achiv/form">Добавить</a>
+</div>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Иконка</th>
+        <th>Название</th>
+        <th>Описание</th>
+        <th colspan="3">Действия</th>
+    </tr>
+    {% for achiv in achivs %}
+        <tr>
+            <td>{{ achiv.id }}</td>
+            <td><img src="{{ static_versioned('uploads/achiv_icons/'+achiv.id|string+'.png') }}"></td>
+            <td>{{ achiv.title }}</td>
+            <td>{{ achiv.description }}</td>
+            <td><a href="/achiv/{{ achiv.id }}">Редактировать</a></td>
+            <td><a href="/achiv/{{ achiv.id }}">Удалить</a></td>
+            <td><a href="/achiv/{{ achiv.id }}">Выдать</a></td>
+        </tr>
+    {% endfor %}
+</table>

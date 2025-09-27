@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание ачивки</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_versioned('style/main.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="header_btns main_menu_btns">
+            <a href="/dashboard?page=admin&select=achivs">Панель управления</a>
+        </div>
+        <a href="/profile/{{ current_user.id }}">
+            <div class="header_profile">
+                <img src="{{ static_versioned('uploads/avatars/'+current_user.id|string+'.png') }}">
+                <p>
+                    {{ current_user.last_name }}<br>
+                    {{ current_user.first_name }}
+                </p>
+            </div>
+        </a>
+        <div class="profile_menu">
+            <a href="/logout">Выйти</a>
+        </div>
+
+        <script>
+        $(function() {
+            let $profile = $(".header_profile");
+            let $menu = $(".profile_menu");
+            let timeout;
+
+            function showMenu() {
+                clearTimeout(timeout);
+                $menu.stop(true, true).fadeIn(200);
+            }
+
+            function hideMenu() {
+                timeout = setTimeout(function() {
+                    $menu.stop(true, true).fadeOut(200);
+                }, 200);
+            }
+
+            $profile.on("mouseenter", showMenu);
+            $profile.on("mouseleave", hideMenu);
+
+            $menu.on("mouseenter", showMenu);
+            $menu.on("mouseleave", hideMenu);
+        });
+        </script>
+    </div>
+    <div class="main">
+        <div class="main_form">
+            <form method="post" action="{% if achiv.name %}/achiv?id={{achiv.id}}{% else %}/achiv{% endif %}">
+            <div class="flex_container">
+                <div class="col_block w10">
+                    <label>Иконка</label>
+
+                    <!-- Превью и кнопка -->
+                    <img src="{{ static_versioned('uploads/achiv_icons/default.png') }}" id="iconPreview" style="width:80px; height:80px; cursor:pointer; border:2px dashed #36b; border-radius:10px;">
+                    <input type="file" id="iconInput" name="icon" accept="image/*" style="display:none;">
+
+                    <!-- Модальное окно cropper -->
+                    <div id="iconModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center;">
+                        <div style="background:#111; padding:20px; border-radius:10px; text-align:center;">
+                            <img id="cropIconImage" style="max-width:300px; max-height:300px;">
+                            <div style="margin-top:10px;">
+                                <button type="button" id="cropSave">Сохранить</button>
+                                <button type="button" id="cropCancel">Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col_block w40">
+                    <label>Название</label>
+                    <input type="text" name="title" placeholder="Добро пожаловать!" value="{{ achiv.title }}" required>
+                </div>
+                <div class="col_block w40">
+                    <label>Описание</label>
+                    <input type="text" name="desc" placeholder="Зарегистрируйтесь в сервисе" value="{{ achiv.desc }}" required>
+                </div>
+            </div>
+            <input type="submit" value="{% if achiv.name %}Обновить{% else %}Создать{% endif %}">
+            </form>
+        </div>
+    </div>
+    <script>
+    let cropper;
+
+    $("#iconPreview").on("click", () => $("#iconInput").click());
+
+    $("#iconInput").on("change", function(e){
+        const file = e.target.files[0];
+        if(!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(ev){
+            $("#cropIconImage").attr("src", ev.target.result);
+            $("#iconModal").css("display", "flex");
+
+            if(cropper) cropper.destroy();
+            cropper = new Cropper(document.getElementById("cropIconImage"), {
+                aspectRatio: 1,
+                viewMode: 1,
+            });
+        };
+        reader.readAsDataURL(file);
+    });
+
+    $("#cropSave").on("click", function(){
+        if(!cropper) return;
+
+        cropper.getCroppedCanvas({ width: 80, height: 80 })
+            .toBlob(function(blob){
+                // обновляем превью
+                const url = URL.createObjectURL(blob);
+                $("#iconPreview").attr("src", url);
+
+                // создаем File для формы
+                const file = new File([blob], "icon.png", { type:"image/png" });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                $("#iconInput")[0].files = dataTransfer.files;
+
+                // закрываем модальное окно
+                $("#iconModal").hide();
+                cropper.destroy();
+            }, "image/png");
+    });
+
+    $("#cropCancel").on("click", function(){
+        $("#iconModal").hide();
+        if(cropper) cropper.destroy();
+    });
+    
+    $("form").on("submit", function(e){
+        e.preventDefault(); // блокируем стандартный сабмит
+
+        const formData = new FormData(this);
+
+        // если есть кропнутый файл
+        const files = $("#iconInput")[0].files;
+        if(files.length > 0){
+            formData.set("icon", files[0]);
+        }
+
+        fetch(this.action, {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.redirected ? window.location.href = res.url : null);
+    });
+    </script>
+</body>
+</html>
