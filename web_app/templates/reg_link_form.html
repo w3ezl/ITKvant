@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание ссылок</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_versioned('style/main.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="header_btns main_menu_btns">
+            <a href="/dashboard?page=admin&select=links">Панель управления</a>
+        </div>
+        <a href="profile/{{ current_user.id }}">
+            <div class="header_profile">
+                <img src="{{ static_versioned('uploads/avatars/'+current_user.id|string+'.png') }}">
+                <p>
+                    {{ current_user.last_name }}<br>
+                    {{ current_user.first_name }}
+                </p>
+            </div>
+        </a>
+    </div>
+    <div class="main">
+        <div class="main_form">
+            <form method="post" action="/reg_link">
+            <div class="flex_container">
+                <div class="col_block w20">
+                    <label>Количество</label>
+                    <input type="number" name="count" placeholder="12" required>
+                </div>
+                <div class="col_block w20">
+                    <label>Группа</label>
+                    <select name="group" required>
+                        {% for group in groups %}
+                            <option value="{{ group.id }}">{{ group.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <input type="submit" value="Создать">
+            </form>
+        </div>
+    </div>
+</body>
+</html>

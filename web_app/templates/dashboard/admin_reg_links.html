@@ -1,0 +1,36 @@
+<div class="title">
+    <h1>Ссылки для регистрации</h1>
+    <a href="/reg_link/form">Добавить</a>
+</div>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Ссылка</th>
+        <th>Группа</th>
+        <th>Действия</th>
+    </tr>
+    {% for link in reg_links %}
+        <tr>
+            <td>{{ link.id }}</td>
+            <td><a href="{{ link.url }}" class="copy-link">{{ link.url }}</a></td>
+            <td><a href="/group/{{ link.group.id }}">{{ link.group.name }}</a></td>
+            <td><a href="/reg_link/{{ link.id }}">Удалить</a></td>
+        </tr>
+    {% endfor %}
+</table>
+
+<script>
+$(document).on("click", ".copy-link", function(e) {
+    e.preventDefault();
+    const text = $(this).text();
+
+    const tempInput = $("<input>");
+    $("body").append(tempInput);
+    tempInput.val(text).select();
+    document.execCommand("copy");
+    tempInput.remove();
+
+    showToast("Ссылка скопирована!");
+});
+</script>

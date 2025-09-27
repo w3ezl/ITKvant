@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Рагистрация</title>
     <link rel="stylesheet" type="text/css" href="{{ static_versioned('style/main.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 </head>
 <body>
     <div class="main_auth reg">
@@ -14,13 +17,24 @@
 
             <div class="col2_reg">
                 <div class="col_reg">
-                    <img src="{{ static_versioned('img/unknown_user.svg') }}" class="avatar">
+                    <img src="{{ static_versioned('img/unknown_user.svg') }}" class="avatar" id="avatarPreview">
+                    <input type="file" id="avatarInput" accept="image/*" style="display:none;">
                     <label>Нажмите, чтобы изменить аватар</label>
+
+                    <div id="avatarModal">
+                        <div class="avatarBlock">
+                            <img id="cropImage">
+                            <div class="cropButtons">
+                                <div id="cropCancel">Отмена</div>
+                                <div id="cropSave">Сохранить</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col_reg">
-                    <input type="text" name="login" placeholder="Фамилия">
-                    <input type="text" name="login" placeholder="Имя">
-                    <input type="text" name="login" placeholder="Отчество">
+                    <input type="text" name="last_name" placeholder="Фамилия" required>
+                    <input type="text" name="first_name" placeholder="Имя" required>
+                    <input type="text" name="father_name" placeholder="Отчество" required>
                 </div>
             </div>
 
@@ -29,30 +43,68 @@
                     <div class="gender_select">
                         <div class="male_block">
                             <svg viewBox="0 0 286 571" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M245.192 234.5C258.454 234.5 270.855 241.074 278.298 252.052C285.741 263.029 287.26 276.983 282.351 289.305L180.159 545.805L179.869 546.514C173.638 561.327 159.121 571 143 571C126.624 571 111.902 561.018 105.841 545.805L3.64966 289.305C-1.25924 276.983 0.259102 263.029 7.70239 252.052C15.1456 241.074 27.546 234.5 40.8088 234.5H245.192ZM143 531L245.192 274.5H40.8088L143 531ZM148 0C210.408 0.000148439 261 50.5919 261 113C261 175.408 210.408 226 148 226C85.5921 226 35.0002 175.408 35.0002 113C35.0002 50.5918 85.5921 0 148 0ZM148 40C107.683 40 75.0002 72.6832 75.0002 113C75.0002 153.317 107.683 186 148 186C188.317 186 221 153.317 221 113C221 72.6833 188.317 40.0001 148 40Z" fill="#fff2" class="active" id="male_gender"/>
+                                <path
+                                d="M245.192 234.5C258.454 234.5 270.855 241.074 278.298 252.052C285.741 263.029 287.26 276.983 282.351 289.305L180.159 545.805L179.869 546.514C173.638 561.327 159.121 571 143 571C126.624 571 111.902 561.018 105.841 545.805L3.64966 289.305C-1.25924 276.983 0.259102 263.029 7.70239 252.052C15.1456 241.074 27.546 234.5 40.8088 234.5H245.192ZM143 531L245.192 274.5H40.8088L143 531ZM148 0C210.408 0.000148439 261 50.5919 261 113C261 175.408 210.408 226 148 226C85.5921 226 35.0002 175.408 35.0002 113C35.0002 50.5918 85.5921 0 148 0ZM148 40C107.683 40 75.0002 72.6832 75.0002 113C75.0002 153.317 107.683 186 148 186C188.317 186 221 153.317 221 113C221 72.6833 188.317 40.0001 148 40Z"
+                                id="male_gender"
+                                class="active"
+                                fill="#fff2"
+                                />
                             </svg>
                         </div>
                         <div class="female_block">
                             <svg viewBox="0 0 286 572" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M143 235C159.376 235 174.098 244.982 180.159 260.195L282.351 516.695C287.26 529.017 285.741 542.971 278.298 553.948C270.855 564.926 258.454 571.5 245.192 571.5H40.8088C27.546 571.5 15.1456 564.926 7.70239 553.948C0.259101 542.971 -1.25923 529.017 3.64966 516.695L105.841 260.195L106.131 259.486C112.362 244.673 126.88 235 143 235ZM40.8088 531.5H245.192L143 275L40.8088 531.5ZM143 0C205.408 0.000146377 256 50.5919 256 113C256 175.408 205.408 226 143 226C80.5921 226 30.0002 175.408 30.0002 113C30.0002 50.5918 80.5921 0 143 0ZM143 40C102.683 40 70.0002 72.6832 70.0002 113C70.0002 153.317 102.683 186 143 186C183.317 186 216 153.317 216 113C216 72.6833 183.317 40.0001 143 40Z" fill="#fff2" id="female_gender"/>
+                                <path
+                                d="M143 235C159.376 235 174.098 244.982 180.159 260.195L282.351 516.695C287.26 529.017 285.741 542.971 278.298 553.948C270.855 564.926 258.454 571.5 245.192 571.5H40.8088C27.546 571.5 15.1456 564.926 7.70239 553.948C0.259101 542.971 -1.25923 529.017 3.64966 516.695L105.841 260.195L106.131 259.486C112.362 244.673 126.88 235 143 235ZM40.8088 531.5H245.192L143 275L40.8088 531.5ZM143 0C205.408 0.000146377 256 50.5919 256 113C256 175.408 205.408 226 143 226C80.5921 226 30.0002 175.408 30.0002 113C30.0002 50.5918 80.5921 0 143 0ZM143 40C102.683 40 70.0002 72.6832 70.0002 113C70.0002 153.317 102.683 186 143 186C183.317 186 216 153.317 216 113C216 72.6833 183.317 40.0001 143 40Z"
+                                id="female_gender"
+                                fill="#fff2"
+                                />
                             </svg>
                         </div>
                     </div>
-                <label>Пол: мужской</label>
+
+                    <label id="gender_label">Пол: мужской</label>
+                    <input type="hidden" name="gender" id="gender_input" value="male" />
                 </div>
+
+                <script>
+                    $(function () {
+                        function selectGender(gender) {
+                            if (gender === "male") {
+                                $("#gender_input").val("male");
+                                $("#male_gender").addClass("active");
+                                $("#female_gender").removeClass("active");
+                                $("#gender_label").text("Пол: мужской");
+                            } else {
+                                $("#gender_input").val("female");
+                                $("#female_gender").addClass("active");
+                                $("#male_gender").removeClass("active");
+                                $("#gender_label").text("Пол: женский");
+                            }
+                        }
+
+                        $(".male_block").on("click", function () {
+                            selectGender("male");
+                        });
+
+                        $(".female_block").on("click", function () {
+                            selectGender("female");
+                        });
+                    });
+                </script>
+
                 <div class="col_reg">
                     <p>
-                        Группа: <span>ИТ 2-2</span><br>
-                        Наставник: <span>Татьяна Григорьевна</span>
+                        Группа: <span>{{ group.name }}</span><br>
+                        Наставник: <span>{{ teacher.first_name }} {{ teacher.father_name }}</span>
                     </p>
                 </div>
             </div>
 
             
 
-            <input type="text" name="login" placeholder="Логин">
-            <input type="password" name="password" placeholder="Пароль">
-            <input type="password" name="password2" placeholder="Повторите пароль">
+            <input type="text" name="login" placeholder="Логин" required>
+            <input type="password" name="password" placeholder="Пароль" required>
+            <input type="password" name="password2" placeholder="Повторите пароль" required>
             <input type="submit" value="Создать" class="auth_btn">
         </form>
         <div class="change_page">
@@ -79,6 +131,63 @@
         }
         element.innerHTML = ""
         typeEffect();
+    </script>
+    <script>
+      const avatar = document.getElementById("avatarPreview");
+      const input = document.getElementById("avatarInput");
+      const modal = document.getElementById("avatarModal");
+      const cropImage = document.getElementById("cropImage");
+      const cropSave = document.getElementById("cropSave");
+      const cropCancel = document.getElementById("cropCancel");
+      let cropper;
+
+      avatar.addEventListener("click", () => input.click());
+
+      // загрузка выбранного файла
+      input.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          cropImage.src = ev.target.result;
+          modal.style.display = "flex";
+
+          if (cropper) cropper.destroy();
+          cropper = new Cropper(cropImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+
+      cropSave.addEventListener("click", () => {
+        cropper.getCroppedCanvas({ width: 300, height: 300 })
+          .toBlob((blob) => {
+            const formData = new FormData();
+            formData.append("avatar", blob, "avatar.png");
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get("code");
+
+            fetch(`/upload_avatar?code=${code}`, {
+              method: "POST",
+              body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+              if (data.url) {
+                avatar.src = data.url + "?v=" + Date.now(); // обновляем + сбиваем кеш
+              }
+              modal.style.display = "none";
+            });
+          }, "image/png");
+      });
+
+      cropCancel.addEventListener("click", () => {
+        modal.style.display = "none";
+        if (cropper) cropper.destroy();
+      });
     </script>
 </body>
 </html>

@@ -1,0 +1,49 @@
+<div class="title">
+    <h1>Группы</h1>
+    <a href="/group/form">Добавить</a>
+</div>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Год обучения</th>
+        <th>Учитель</th>
+        <th colspan="2">Действия</th>
+    </tr>
+    {% for group in groups %}
+        <tr>
+            <td>{{ group.id }}</td>
+            <td><a href="/group/{{ group.id }}">{{ group.name }}</a></td>
+            <td>{{ group.study_year }}</td>
+            <td><a href="/profile/{{ group.teacher.id }}">{{ group.teacher.first_name }} {{ group.teacher.father_name }}</a></td>
+            <td><a href="/group/form?id={{ group.id }}">Редактировать</a></td>
+            <td><a href="#" class="delete-group" data-id="{{ group.id }}">Удалить</a></td>
+        </tr>
+    {% endfor %}
+</table>
+
+<script>
+$(document).on("click", ".delete-group", function(e) {
+    e.preventDefault();
+    const id = $(this).data("id");
+
+    if (confirm("Вы действительно хотите удалить эту группу?")) {
+        $.ajax({
+            url: `/group/${id}`,
+            type: "DELETE",
+            success: function() {
+                // Обновляем страницу после успешного удаления
+                window.location.reload();
+            },
+            error: function(xhr) {
+                message = xhr.status
+                if (message == 500){
+                    message = "Скорее всего в этой группе есть пользователи"
+                }
+                alert("Ошибка при удалении: " + message);
+            }
+        });
+    }
+});
+</script>

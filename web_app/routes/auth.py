@@ -28,3 +28,9 @@ def auth_page():
     if not is_login():
         return render_template("auth.html")
     return redirect(url_for("dashboard_page"))
+
+@app.route("/logout", methods=["GET"])
+def logout():
+    if is_login():
+        session.clear()
+    return redirect(url_for("auth_page"))

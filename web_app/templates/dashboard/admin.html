@@ -1,0 +1,85 @@
+<div class="admin_panel">
+    <div class="header_btns admin_btns">
+        <button id="adminGroups">Группы</button>
+        <button id="adminUsers">Пользователи</button>
+        <button id="adminLinks">Ссылки для регистрации</button>
+        <button id="adminAchiv">Ачивки</button>
+    </div>
+    <div class="admin_main"></div>
+    <script>
+        // Глобальные маршруты
+        window.adminRoutes = window.adminRoutes || {
+            "#adminGroups": "/admin_groups",
+            "#adminUsers": "/admin_profiles",
+            "#adminLinks": "/admin_links",
+            "#adminAchiv": "/admin_achivs"
+        };
+
+        window.adminMap = window.adminMap || {
+            "groups":   { button: "#adminGroups",   url: window.adminRoutes["#adminGroups"] },
+            "users":    { button: "#adminUsers",    url: window.adminRoutes["#adminUsers"] },
+            "links":    { button: "#adminLinks",    url: window.adminRoutes["#adminLinks"] },
+            "achivs": { button: "#adminAchiv", url: window.adminRoutes["#adminAchiv"] }
+        };
+
+        // Функция загрузки контента с проверкой текущего URL
+        function loadAdminContent(url, button) {
+            const $adminMain = $(".admin_main");
+            const currentUrl = $adminMain.data("current-url");
+
+            if (currentUrl === url) return; // уже загружено
+
+            $adminMain.data("current-url", url).load(url, function() {
+                $(".admin_btns button").removeClass("active");
+                $(button).addClass("active");
+            });
+        }
+
+        // Делегирование кликов на контейнер, который не перезаписывается
+        $(".main").on("click", ".admin_btns button", function() {
+            const buttonId = "#" + this.id;
+            const url = window.adminRoutes[buttonId];
+            if (!url) return;
+
+            loadAdminContent(url, this);
+
+            const selectKey = Object.keys(window.adminMap).find(
+                key => window.adminMap[key].button === buttonId
+            );
+            if (selectKey) {
+                const params = new URLSearchParams(window.location.search);
+                params.set("select", selectKey);
+                const newUrl = `${window.location.pathname}?${params.toString()}`;
+                window.history.pushState({}, "", newUrl);
+            }
+        });
+
+        // Получение параметра query string
+        function getQueryParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        $(document).ready(function() {
+            let select = getQueryParam("select") || "groups";
+
+            // Устанавливаем дефолтный параметр в URL, если его нет
+            if (!getQueryParam("select")) {
+                const params = new URLSearchParams(window.location.search);
+                params.set("select", select);
+                const newUrl = `${window.location.pathname}?${params.toString()}`;
+                window.history.replaceState({}, "", newUrl);
+            }
+
+            // Загружаем начальный контент
+            if (window.adminMap[select]) {
+                loadAdminContent(window.adminMap[select].url, window.adminMap[select].button);
+            } else {
+                loadAdminContent(window.adminMap["groups"].url, window.adminMap["groups"].button);
+            }
+        });
+    </script>
+
+
+
+</div>

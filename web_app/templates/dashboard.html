@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель управления</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_versioned('style/main.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="header_btns main_menu_btns">
+            <button id="showRating">Таблица рейтинга</button>
+            {% if current_user.is_teacher %}
+                <button id="showAdmin">Админка</button>
+            {% endif %}
+        </div>
+        <a href="/profile/{{ current_user.id }}">
+            <div class="header_profile">
+                <img src="{{ static_versioned('uploads/avatars/'+current_user.id|string+'.png') }}">
+                <p>
+                    {{ current_user.last_name }}<br>
+                    {{ current_user.first_name }}
+                </p>
+            </div>
+        </a>
+        <div class="profile_menu">
+            <a href="/logout">Выйти</a>
+        </div>
+
+        <script>
+        $(function() {
+            let $profile = $(".header_profile");
+            let $menu = $(".profile_menu");
+            let timeout;
+
+            function showMenu() {
+                clearTimeout(timeout);
+                $menu.stop(true, true).fadeIn(200);
+            }
+
+            function hideMenu() {
+                timeout = setTimeout(function() {
+                    $menu.stop(true, true).fadeOut(200);
+                }, 200);
+            }
+
+            $profile.on("mouseenter", showMenu);
+            $profile.on("mouseleave", hideMenu);
+
+            $menu.on("mouseenter", showMenu);
+            $menu.on("mouseleave", hideMenu);
+        });
+        </script>
+    </div>
+    <div class="main"></div>
+    
+    <script>
+        const routes = {
+            "#showRating": "/rating_table",
+            "#showAdmin": "/admin"
+        };
+
+        const pageMap = {
+            "rating_table": { button: "#showRating", url: routes["#showRating"] },
+            "admin": { button: "#showAdmin", url: routes["#showAdmin"] }
+        };
+
+        function loadContent(url, button) {
+            $(".main").load(url, function() {
+                $(".main_menu_btns button").removeClass("active");
+                $(button).addClass("active");
+            });
+        }
+
+        // обработчики кликов
+        $.each(routes, function(buttonId, url) {
+            $(buttonId).on("click", function() {
+                loadContent(url, this);
+
+                // обновляем URL с новым page
+                const pageKey = Object.keys(pageMap).find(
+                    key => pageMap[key].button === buttonId
+                );
+                if (pageKey) {
+                    const newUrl = `?page=${pageKey}`;
+                    window.history.pushState({}, "", newUrl);
+                }
+            });
+        });
+
+        function getQueryParam(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        $(document).ready(function() {
+            let page = getQueryParam("page");
+
+            // если параметра нет — устанавливаем дефолтный
+            if (!page) {
+                page = "rating_table"; // 👈 дефолтное значение
+                const newUrl = `?page=${page}`;
+                window.history.replaceState({}, "", newUrl);
+            }
+
+            if (pageMap[page]) {
+                loadContent(pageMap[page].url, pageMap[page].button);
+            } else {
+                // fallback если в URL несуществующее значение
+                loadContent(pageMap["rating_table"].url, pageMap["rating_table"].button);
+            }
+        });
+    </script>
+
+    <div id="toast"></div>
+
+    <script>
+    function showToast(message, duration=2000) {
+        const $toast = $("#toast");
+        $toast.text(message).fadeIn(200);
+
+        setTimeout(() => {
+            $toast.fadeOut(200);
+        }, duration);
+    }
+    </script>
+</body>
+</html>

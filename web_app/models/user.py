@@ -9,7 +9,7 @@ class User(BaseModel):
 
     login = CharField(max_length=32, unique=True, null=False)
     password = CharField(null=False)
-    group = DeferredForeignKey("Group", backref="students", column_name="group_id", null=True, field=IntegerField())
+    group = DeferredForeignKey("Group", backref="students", column_name="group_id", null=True)
     is_teacher = BooleanField(default=False, null=False) #
     rating_points = IntegerField(default=0) #
     first_name = CharField(max_length=32) #
@@ -17,4 +17,4 @@ class User(BaseModel):
     father_name = CharField(max_length=32) #
     gender = CharField(choices=GENDER_CHOICES)
     status = CharField(null=True, max_length=150) #
-    project = DeferredForeignKey("Project", backref="participants", column_name="project_id", null=True, field=IntegerField()) #
+    project = DeferredForeignKey("Project", backref="participants", column_name="project_id", null=True) #

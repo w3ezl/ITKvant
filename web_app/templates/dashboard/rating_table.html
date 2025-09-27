@@ -1,0 +1,40 @@
+<div class="rating_table">
+	<h1>Рейтинг</h1>
+	<table>
+		<tr>
+			<th>Место</th>
+			<th>Профиль</th>
+			<th>Группа</th>
+			<th>Баллы рейтинга</th>
+		</tr>
+		{% for user in students %}
+		<tr id="rating{{ loop.index }}">
+			<td>
+				{{ loop.index }}
+				{% if loop.index <= 10 %}
+					<svg width="15" height="13" viewBox="0 0 96 84" fill="none" xmlns="http://www.w3.org/2000/svg" style="top: 5px;">
+						<path d="M80 84H16V72H80V84ZM48 0C52.4183 0 56 3.58172 56 8C56 11.2123 54.1056 13.98 51.374 15.2529L63.3154 48H63.3164L82.5615 33.8652C80.9866 32.4042 80 30.3177 80 28C80 23.5817 83.5817 20 88 20C92.4183 20 96 23.5817 96 28C96 32.4183 92.4183 36 88 36C87.3048 36 86.6304 35.9108 85.9873 35.7441L79.1387 67.9834L79 67.8936V68H17V67.1543L10.3086 35.6602C9.5775 35.8802 8.8028 36 8 36C3.58172 36 0 32.4183 0 28C0 23.5817 3.58172 20 8 20C12.4183 20 16 23.5817 16 28C16 30.2496 15.0699 32.2809 13.5752 33.7344L32.75 47.8184L44.625 15.2529C41.8939 13.9799 40 11.212 40 8C40 3.58172 43.5817 0 48 0Z" fill="#fff3" id="rating{{ loop.index }}"/>
+					</svg>
+				{% endif %}
+			</td>
+			<td class="d_profile">
+				<a href="/profile/{{ user.id }}">
+					<div class="profile">
+						<img src="{{ static_versioned('uploads/avatars/'+user.id|string+'.png') }}" id="rating{{ loop.index }}">
+						<p id="rating{{ loop.index }}">
+							{{ user.last_name }}<br>
+							{{ user.first_name }}
+						</p>
+					</div>
+				</a>
+			</td>
+			<td>{{ user.group.name if user.group else "—" }}</td>
+			<td>{{ user.rating_points }}</td>
+		</tr>
+		{% else %}
+		<tr>
+			<td colspan="4">Зарегистрированных учеников нет</td>
+		</tr>
+		{% endfor %}
+	</table>
+</div>

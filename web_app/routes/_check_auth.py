@@ -6,5 +6,5 @@ def is_login():
         return True
     return False
 
-def auth_user():
+def current_user():
     return User.get(User.login == session["login"])
