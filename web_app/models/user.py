@@ -1,5 +1,6 @@
-from peewee import CharField, IntegerField, BooleanField, ForeignKeyField
-from web_app.models import BaseModel
+from peewee import CharField, IntegerField, BooleanField, ForeignKeyField, DeferredForeignKey
+
+from web_app.models import BaseModel, Groups
 
 class Users(BaseModel):
     GENDER_CHOICES = (('male', 'Male'), ('female', 'Female'))
@@ -13,7 +14,7 @@ class Users(BaseModel):
     is_teacher = BooleanField(default=False)
     rating_points = IntegerField(default=0)
     status = CharField(null=True, max_length=150)
-    group = ForeignKeyField(
+    group = DeferredForeignKey(
         'Groups',
         backref='students',
         column_name='group_id',
