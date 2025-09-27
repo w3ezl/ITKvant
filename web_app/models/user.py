@@ -1,6 +1,6 @@
-from peewee import CharField, IntegerField, BooleanField, ForeignKeyField, DeferredForeignKey
+from peewee import CharField, IntegerField, BooleanField, DeferredForeignKey
 
-from web_app.models import BaseModel, Groups
+from web_app.models import BaseModel
 
 class Users(BaseModel):
     GENDER_CHOICES = (('male', 'Male'), ('female', 'Female'))

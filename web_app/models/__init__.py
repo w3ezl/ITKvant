@@ -13,8 +13,8 @@ class BaseModel(Model):
         self.updated_at = datetime.now(timezone.utc)
         return super().save(*args, **kwargs)
 
-from .group import Groups
 from .user import Users
+from .group import Groups
 from .project import Projects
 from .achievement import Achievements
 from .task import Tasks
