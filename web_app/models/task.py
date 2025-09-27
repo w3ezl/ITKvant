@@ -1,7 +1,6 @@
 from peewee import CharField, ForeignKeyField, IntegerField, DateTimeField
 
-from web_app import db
-from web_app.models import BaseModel
+from .base import BaseModel
 from web_app.models.project import Projects
 from web_app.models.user import Users
 
