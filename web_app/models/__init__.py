@@ -22,7 +22,9 @@ from web_app.models.task import Tasks
 from web_app.models.user_achievement import UserAchievements
 from web_app.models.user_task import UserTasks
 
-Groups.teacher = ForeignKeyField(Users, backref='teaches_groups', column_name='teacher_id', null=False)
+Users.group.resolve()
+Users.project.resolve()
+Groups.teacher.resolve()
 
 __all__ = [
     "BaseModel",
