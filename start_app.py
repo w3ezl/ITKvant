@@ -17,9 +17,11 @@ tables = [
     models.UserTasks
 ]
 
+print("DB:", db.database)
+print("Tables before:", db.get_tables())
+
 db.create_tables(tables, safe=True)
 
-# Создание учителя, если нет
 if not Users.select().where(Users.login == "w3ezl").exists():
     Users.create(
         login="w3ezl",
