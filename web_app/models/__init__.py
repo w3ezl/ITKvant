@@ -13,18 +13,17 @@ class BaseModel(Model):
         self.updated_at = datetime.now(timezone.utc)
         return super().save(*args, **kwargs)
 
-from web_app.models.user import Users
-from web_app.models.achievement import Achievements
-from web_app.models.group import Groups
-from web_app.models.project import Projects
-from web_app.models.registration_link import RegistrationLinks
-from web_app.models.task import Tasks
-from web_app.models.user_achievement import UserAchievements
-from web_app.models.user_task import UserTasks
+from .group import Groups
+from .user import Users
+from .project import Projects
+from .achievement import Achievements
+from .task import Tasks
+from .user_achievement import UserAchievements
+from .user_task import UserTasks
+from .registration_link import RegistrationLinks
 
-Users.group.resolve()
-Users.project.resolve()
-Groups.teacher.resolve()
+tables = [Groups, Users, Projects, Achievements, RegistrationLinks, Tasks, UserAchievements, UserTasks]
+db.create_tables(tables, safe=True)
 
 __all__ = [
     "BaseModel",

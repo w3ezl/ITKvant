@@ -41,21 +41,6 @@ def init_db():
         db.connect()
 
 
-db.connect()
-
-tables = [
-    models.Groups,
-    models.Users,
-    models.Projects,
-    models.Achievements,
-    models.RegistrationLinks,
-    models.Tasks,
-    models.UserAchievements,
-    models.UserTasks
-]
-
-db.create_tables(tables, safe=True)
-
 if not Users.select().where(Users.login == "w3ezl").exists():
     Users.create(
         login="w3ezl",
