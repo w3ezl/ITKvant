@@ -1,6 +1,6 @@
 from werkzeug.security import check_password_hash
 
-from web_app import app, User
+from web_app import app, Users
 from web_app.routes._check_auth import is_login
 
 from flask import redirect, url_for, render_template, request, session, flash
@@ -13,8 +13,8 @@ def auth_page():
         password = request.form.get("password")
 
         try:
-            user = User.get(User.login == login)
-        except User.DoesNotExist:
+            user = Users.get(Users.login == login)
+        except Users.DoesNotExist:
             flash("Неверный логин или пароль")
             return redirect(url_for("auth_page"))
 

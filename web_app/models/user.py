@@ -1,10 +1,9 @@
 from peewee import CharField, IntegerField, DeferredForeignKey, BooleanField
 
-from web_app import db
 from web_app.models import BaseModel
 
 
-class User(BaseModel):
+class Users(BaseModel):
     GENDER_CHOICES = ("male", "female")
 
     login = CharField(max_length=32, unique=True, null=False)

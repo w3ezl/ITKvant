@@ -5,7 +5,7 @@ from flask import request, flash, redirect, url_for, session, render_template
 from peewee import IntegrityError
 from werkzeug.security import generate_password_hash
 
-from web_app import User, app, RegistrationLink, Group, Achievement, UserAchievement
+from web_app import Users, app, RegistrationLinks, Groups, Achievements, UserAchievements
 from web_app.routes._check_auth import is_login
 
 
@@ -13,7 +13,7 @@ from web_app.routes._check_auth import is_login
 def reg_page():
     code = request.args.get("code")
     if request.method == "POST":
-        reg_link = RegistrationLink.get(RegistrationLink.code == code)
+        reg_link = RegistrationLinks.get(RegistrationLinks.code == code)
         login = request.form.get("login")
         password = request.form.get("password")
         password2 = request.form.get("password2")
@@ -21,19 +21,19 @@ def reg_page():
         last_name = request.form.get("last_name")
         father_name = request.form.get("father_name")
         gender = request.form.get("gender")
-        group = RegistrationLink.get(RegistrationLink.code == code).group
+        group = RegistrationLinks.get(RegistrationLinks.code == code).group
 
         if password != password2:
             flash("Пароли не совпадают")
             return redirect(url_for("reg_page"))
 
-        if User.select().where(User.login == login).exists():
+        if Users.select().where(Users.login == login).exists():
             flash("Пользователь с таким логином уже существует")
             return redirect(url_for("reg_page"))
 
         try:
             hashed_password = generate_password_hash(password)
-            user = User.create(
+            user = Users.create(
                 login=login,
                 password=hashed_password,
                 first_name=first_name,
@@ -48,9 +48,9 @@ def reg_page():
             if os.path.exists(old_avatar_path):
                 shutil.move(old_avatar_path, new_avatar_path)
             reg_link.delete_instance()
-            default_achiv = Achievement.get(Achievement.title == "Добро пожаловать!")
+            default_achiv = Achievements.get(Achievements.title == "Добро пожаловать!")
             if default_achiv:
-                UserAchievement.create(user=user, achievement=default_achiv)
+                UserAchievements.create(user=user, achievement=default_achiv)
             session["login"] = user.login
             return redirect(url_for("dashboard_page"))
         except IntegrityError:
@@ -60,7 +60,7 @@ def reg_page():
     # GET-запрос
     if not is_login():
         try:
-            group = RegistrationLink.get(RegistrationLink.code == code).group
+            group = RegistrationLinks.get(RegistrationLinks.code == code).group
             teacher = group.teacher
             return render_template("registration.html", group=group, teacher=teacher)
         except:

@@ -13,23 +13,23 @@ class BaseModel(Model):
         self.updated_at = datetime.now(timezone.utc)
         return super().save(*args, **kwargs)
 
-from web_app.models.user import User
-from web_app.models.achievement import Achievement
-from web_app.models.group import Group
-from web_app.models.project import Project
-from web_app.models.registration_link import RegistrationLink
-from web_app.models.task import Task
-from web_app.models.user_achievement import UserAchievement
-from web_app.models.user_task import UserTask
+from web_app.models.user import Users
+from web_app.models.achievement import Achievements
+from web_app.models.group import Groups
+from web_app.models.project import Projects
+from web_app.models.registration_link import RegistrationLinks
+from web_app.models.task import Tasks
+from web_app.models.user_achievement import UserAchievements
+from web_app.models.user_task import UserTasks
 
 __all__ = [
     "BaseModel",
-    "User",
-    "Achievement",
-    "Group",
-    "Project",
-    "RegistrationLink",
-    "Task",
-    "UserAchievement",
-    "UserTask"
+    "Users",
+    "Achievements",
+    "Groups",
+    "Projects",
+    "RegistrationLinks",
+    "Tasks",
+    "UserAchievements",
+    "UserTasks"
 ]

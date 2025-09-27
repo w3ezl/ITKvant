@@ -1,16 +1,16 @@
 from flask import render_template
 
-from web_app import app, User
+from web_app import app, Users
 
 
 @app.route("/profile/<int:id>", methods=["GET"])
 def get_profile(id):
-    user = User.get(User.id == id)
+    user = Users.get(Users.id == id)
     ranked_users = (
-        User
+        Users
         .select()
-        .where(User.is_teacher == False)
-        .order_by(User.rating_points.desc(), User.id.asc())
+        .where(Users.is_teacher == False)
+        .order_by(Users.rating_points.desc(), Users.id.asc())
     )
 
     place = None

@@ -1,4 +1,4 @@
-from web_app import app, User
+from web_app import app, Users
 from web_app.routes._check_auth import is_login, current_user
 
 from flask import redirect, url_for, render_template
@@ -14,7 +14,7 @@ def dashboard_page():
 def rating_table():
     if not is_login():
         return redirect(url_for("auth_page"))
-    students = User.select().where(User.is_teacher == False).order_by(User.rating_points.desc())
+    students = Users.select().where(Users.is_teacher == False).order_by(Users.rating_points.desc())
     return render_template("dashboard/rating_table.html", students=students)
 
 @app.route("/admin", methods=["GET"])

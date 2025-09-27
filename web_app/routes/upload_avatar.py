@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, url_for
+from flask import request, jsonify, url_for
 import os
 from werkzeug.utils import secure_filename
 

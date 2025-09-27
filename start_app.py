@@ -2,26 +2,26 @@ import os
 import shutil
 from werkzeug.security import generate_password_hash
 
-from web_app import app, db, models, User, Achievement
+from web_app import app, db, models, Users, Achievements
 
 db.connect()
 
 tables = [
-    models.Group,
-    models.User,
-    models.Project,
-    models.Achievement,
-    models.RegistrationLink,
-    models.Task,
-    models.UserAchievement,
-    models.UserTask
+    models.Groups,
+    models.Users,
+    models.Projects,
+    models.Achievements,
+    models.RegistrationLinks,
+    models.Tasks,
+    models.UserAchievements,
+    models.UserTasks
 ]
 
 db.create_tables(tables, safe=True)
 
 # Создание учителя, если нет
-if not User.select().where(User.login == "w3ezl").exists():
-    User.create(
+if not Users.select().where(Users.login == "w3ezl").exists():
+    Users.create(
         login="w3ezl",
         password=generate_password_hash("(Kjkszpj0033)"),
         first_name="Павел",
@@ -31,8 +31,8 @@ if not User.select().where(User.login == "w3ezl").exists():
         is_teacher=True
     )
 
-if not Achievement.select().where(Achievement.title == "Добро пожаловать!").exists():
-    achiv = Achievement.create(
+if not Achievements.select().where(Achievements.title == "Добро пожаловать!").exists():
+    achiv = Achievements.create(
         title="Добро пожаловать!",
         description="Зарегистрируйтесь в сервисе"
     )

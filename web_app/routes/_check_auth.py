@@ -1,10 +1,10 @@
 from flask import session
-from web_app.models.user import User
+from web_app.models.user import Users
 
 def is_login():
-    if "login" in session and User.select().where(User.login == session["login"]).exists():
+    if "login" in session and Users.select().where(Users.login == session["login"]).exists():
         return True
     return False
 
 def current_user():
-    return User.get(User.login == session["login"])
+    return Users.get(Users.login == session["login"])

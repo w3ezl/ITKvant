@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for
 
-from web_app import app, User, Group, RegistrationLink, Achievement
+from web_app import app, Users, Groups, RegistrationLinks, Achievements
 from web_app.routes._check_auth import is_login, current_user
 
 @app.route("/admin_groups", methods=["GET"])
@@ -9,7 +9,7 @@ def admin_groups():
         return redirect(url_for("auth_page"))
     if not current_user().is_teacher:
         return 403
-    groups = Group.select()
+    groups = Groups.select()
     return render_template("dashboard/admin_groups.html", groups=groups)
 
 
@@ -19,7 +19,7 @@ def admin_links():
         return redirect(url_for("auth_page"))
     if not current_user().is_teacher:
         return 403
-    reg_links = RegistrationLink.select()
+    reg_links = RegistrationLinks.select()
     return render_template("dashboard/admin_reg_links.html", reg_links=reg_links)
 
 
@@ -29,7 +29,7 @@ def admin_profiles():
         return redirect(url_for("auth_page"))
     if not current_user().is_teacher:
         return 403
-    users = User.select()
+    users = Users.select()
     return render_template("dashboard/admin_profiles.html", users=users)
 
 
@@ -39,5 +39,5 @@ def admin_achivs():
         return redirect(url_for("auth_page"))
     if not current_user().is_teacher:
         return 403
-    achivs = Achievement.select()
+    achivs = Achievements.select()
     return render_template("dashboard/admin_achivs.html", achivs=achivs)

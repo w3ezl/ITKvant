@@ -2,14 +2,14 @@ import os
 
 from flask import url_for, session
 
-from web_app import app, User
+from web_app import app, Users
 from web_app.routes._check_auth import is_login
 
 
 @app.context_processor
 def utility_processor():
     if is_login():
-        current_user = User.get(User.login == session["login"])
+        current_user = Users.get(Users.login == session["login"])
     else:
         current_user = {}
     def static_versioned(filename):
