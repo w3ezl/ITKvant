@@ -1,6 +1,5 @@
-from peewee import CharField, IntegerField, ForeignKeyField
+from peewee import CharField, IntegerField
 from playhouse.postgres_ext import JSONField
-from .user import Users
 from .base import BaseModel
 
 
@@ -9,9 +8,3 @@ class Groups(BaseModel):
     schedule = JSONField(null=True)
     study_year = IntegerField(null=False)
 
-    teacher = ForeignKeyField(
-        Users,
-        backref='teaches_groups',
-        column_name='teacher_id',
-        null=True
-    )

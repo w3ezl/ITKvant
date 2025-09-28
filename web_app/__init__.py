@@ -22,7 +22,7 @@ try:
 except FileNotFoundError:
     app.config["APP_VERSION"] = "develop"
 
-logging.basicConfig(filename='web_app/logs/main.log', level=logging.DEBUG)
+logging.basicConfig(filename='web_app/logs/main.logs', level=logging.DEBUG)
 
 db = PostgresqlDatabase(
     "it_kvant",
