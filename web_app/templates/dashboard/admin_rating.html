@@ -1,0 +1,92 @@
+<div class="admin_rating">
+    <h2>Управление баллами</h2>
+
+    <label>Выберите группу:</label>
+    <select id="groupSelect">
+        <option value="">-- Выберите группу --</option>
+        {% for group in groups %}
+        <option value="{{ group.id }}">{{ group.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label>Выберите ученика:</label>
+    <select id="studentSelect" disabled>
+        <option value="">-- Выберите ученика --</option>
+    </select>
+
+    <div id="ratingContainer" style="display:none; margin-top:20px;">
+        <div class="ratingControls">
+            <button id="removePoint" class="redBtn">-</button>
+            <span id="currentPoints" style="font-size: 30px; margin: 0 10px;">0</span>
+            <button id="addPoint" class="greenBtn">+</button>
+        </div>
+        <button id="saveRating" style="display:none; margin-top:10px;">Сохранить</button>
+    </div>
+</div>
+
+<script>
+$(function(){
+    let originalPoints = 0;
+    let currentPoints = 0;
+
+    $("#groupSelect").change(function(){
+        const groupId = $(this).val();
+        $("#studentSelect").prop("disabled", !groupId).html('<option value="">-- Выберите ученика --</option>');
+
+        if(!groupId) return;
+
+        $.get(`/admin_group_students?group_id=${groupId}`, function(data){
+            data.students.forEach(student => {
+                $("#studentSelect").append(`<option value="${student.id}">${student.first_name} ${student.last_name}</option>`);
+            });
+        });
+    });
+
+    $("#studentSelect").change(function(){
+        const studentId = $(this).val();
+        if(!studentId) {
+            $("#ratingContainer").hide();
+            return;
+        }
+
+        $.get(`/admin_student_rating?student_id=${studentId}`, function(data){
+            originalPoints = data.points;
+            currentPoints = data.points;
+            $("#currentPoints").text(currentPoints);
+            $("#saveRating").hide();
+            $("#ratingContainer").show();
+        });
+    });
+
+    $("#addPoint").click(function(){
+        currentPoints++;
+        $("#currentPoints").text(currentPoints);
+        toggleSave();
+    });
+
+    $("#removePoint").click(function(){
+        currentPoints--;
+        $("#currentPoints").text(currentPoints);
+        toggleSave();
+    });
+
+    function toggleSave(){
+        if(currentPoints !== originalPoints){
+            $("#saveRating").show();
+        } else {
+            $("#saveRating").hide();
+        }
+    }
+
+    $("#saveRating").click(function(){
+        const studentId = $("#studentSelect").val();
+        $.post("/admin_save_rating", { student_id: studentId, points: currentPoints }, function(data){
+            if(data.success){
+                originalPoints = currentPoints;
+                toggleSave();
+                showToast("Баллы сохранены!");
+            }
+        });
+    });
+});
+</script>

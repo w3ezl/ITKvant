@@ -14,6 +14,10 @@ input, select, option {
 	border: 0;
 }
 
+select:hover {
+	cursor: pointer;
+}
+
 button {
 	font-family: "JetBrains Mono";
 }
@@ -520,7 +524,7 @@ button {
 	text-align: left;
 }
 
-.main_form input, .main_form select {
+.main_form input, .main_form select, .admin_main .admin_rating select {
 	position: relative;
 	height: 27px !important;
 	font-size: 16px;
@@ -535,11 +539,31 @@ button {
 	box-sizing: border-box;
 }
 
-.main_form input:focus, .main_form select:focus {
+.main_form input:focus, .main_form select:focus, .admin_main .admin_rating select:focus {
 	background: #fff3;
 }
 
-.main_form input[type="submit"] {
+.main_form option, .admin_main .admin_rating option {
+	position: relative;
+	height: 27px !important;
+	font-size: 16px;
+	text-align: left;
+	padding: 1px 10px;
+	background: #111;
+	color: #fff;
+	border: 0;
+	outline: none;
+	transition: background 0.1s;
+	box-sizing: border-box;
+}
+
+.admin_rating #saveRating {
+	color: #fff;
+	border: 0;
+	border-radius: 10px;
+}
+
+.main_form input[type="submit"], .admin_rating #saveRating {
 	background: #36b;
 	padding: 10px;
 	margin: 10px;
@@ -547,7 +571,7 @@ button {
 	display: block;
 }
 
-.main_form input[type="submit"]:hover {
+.main_form input[type="submit"]:hover, .admin_rating #saveRating:hover {
 	background: #38e;
 	cursor: pointer;
 }
@@ -703,11 +727,24 @@ path#rating3 {
 	width: 300px;
 }
 
-.main_profile .flex_container img {
+.main_profile .flex_container .avatar {
 	width: 80px;
 	height: 80px;
 	margin-right: 20px;
 	border-radius: 50%;
+}
+
+.main_profile .flex_container .your_avatar {
+	width: 80px;
+	height: 80px;
+	margin-right: 20px;
+	border-radius: 50%;
+	transition: filter 0.3s;
+}
+
+.main_profile .flex_container .your_avatar:hover {
+	cursor: pointer;
+	filter: brightness(1.1);
 }
 
 .main_profile .flex_container {
@@ -723,12 +760,17 @@ path#rating3 {
 	color: #fff8;
 }
 
+.flex_container .little #status_link {
+	color: #fff;
+}
+
 .flex_container .white {
 	color: #fff;
 }
 
 .flex_container .rating {
 	text-align: right;
+	width: 300px;
 }
 
 .flex_container .rating#rating1 {
@@ -899,4 +941,44 @@ path#rating3 {
 .col_block #iconCropCancel:hover {
     color: #38e;
     cursor: pointer;
+}
+
+.admin_main .admin_rating label {
+	font-size: 14px;
+	color: #fff8;
+}
+
+.greenBtn {
+	background: #2ecc71;
+	color: #fff;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 5px;
+	transition: filter 0.3s;
+	font-size: 20px;
+}
+
+.greenBtn:hover {
+	cursor: pointer;
+	filter: brightness(1.2);
+}
+
+.redBtn {
+	background: #e74c3c;
+	color: #fff;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 5px;
+	transition: filter 0.3s;
+	font-size: 20px;
+}
+
+.redBtn:hover {
+	cursor: pointer;
+	filter: brightness(1.2);
+}
+
+.ratingControls {
+	display: flex;
+	justify-content: center;
 }

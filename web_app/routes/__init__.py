@@ -9,3 +9,6 @@ import web_app.routes.group
 import web_app.routes.reg_links
 import web_app.routes.profile
 import web_app.routes.achiv
+import web_app.routes.update_status
+import web_app.routes.update_avatar
+import web_app.routes.admin_rating

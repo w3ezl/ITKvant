@@ -2,10 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Панель управления</title>
+    <title>{{ current_user.last_name }} {{ current_user.first_name }}</title>
     <link rel="stylesheet" type="text/css" href="{{ static_versioned('style/main.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="icon" type="image/png" href="{{ static_versioned('img/favicon.png') }}" />
+    
+    {% if current_user == user %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    {% endif %}
+
+
+    <meta property="og:title" content="IT-квантум | {{ current_user.last_name }} {{ current_user.first_name }}">
+    <meta property="og:description" content="Сервис для рейтинговой системы учащихся IT-квантума">
+    <meta property="og:image" content="https://itkvantum.ru/static/img/og_image.png">
+    <meta property="og:url" content="https://itkvantum.ru/profile/{{ user.id }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IT-квантум">
 </head>
 <body>
     <div class="header">
@@ -53,10 +66,36 @@
     <div class="main">
         <div class="main_profile">
             <div class="flex_container">
-                <img src="{{ static_versioned('uploads/avatars/'+user.id|string+'.png') }}">
+                <div class="avatar_block">
+                    <img src="{{ static_versioned('uploads/avatars/'+user.id|string+'.png') }}" 
+                         class="{{ 'your_avatar' if current_user == user else 'avatar' }}" 
+                         id="avatarPreview">
+                    {% if current_user == user %}
+                        <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+                    {% endif %}
+                </div>
+
+                {% if current_user == user %}
+                <div id="avatarModal">
+                    <div class="avatarBlock">
+                        <img id="cropImage">
+                        <div class="cropButtons">
+                            <div id="cropCancel">Отмена</div>
+                            <div id="cropSave">Сохранить</div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
                 <div class="info">
                     {{ user.last_name }} {{ user.first_name }}<br>
-                    <span class="little">{{ "Pusto" if not user.status else user.status }}<br>
+                    <span class="little">
+                            <span id="status">
+                                {{ "<Пусто>" if not user.status else user.status }}
+                            </span>
+                            {% if current_user == user %}
+                                <a href="#" id="status_link">Редактировать</a>
+                            {% endif %}
+                        <br>
                     {% if not user.is_teacher %}
                     Группа: <span class="white">{{ user.group.name }}</span> <br>
                     Наставник: <a href="/profile/{{ user.group.teacher.id}}"><span class="white">{{ user.group.teacher.first_name }} {{ user.group.teacher.father_name }}</span></a><br>
@@ -97,5 +136,166 @@
         }, duration);
     }
     </script>
+
+    <script>
+    $(function() {
+        const $status = $("#status");
+        const $link = $("#status_link");
+
+        $link.on("click", function(e) {
+            e.preventDefault();
+
+            // Уже редактируется
+            if ($status.find("input").length) return;
+
+            $link.hide();
+
+            const currentText = $status.text().trim() === "<Пусто>" ? "" : $status.text().trim();
+
+            // Контейнер для инпута и счётчика
+            const $wrapper = $('<div class="status-edit-wrapper"></div>').css({
+                display: 'inline-flex',
+                'align-items': 'center',
+                'gap': '8px'
+            });
+
+            // Инпут
+            const $input = $('<input type="text" id="status_input" maxlength="150">')
+                .val(currentText)
+                .css({
+                    'background': 'transparent',
+                    'border': '1px solid #ccc',
+                    'color': '#fff8',
+                    'font-size': '12px',
+                    'padding': '2px 4px',
+                    'border-radius': '4px',
+                    'width': '100%',
+                    'max-width': '300px'
+                });
+
+            // Счётчик
+            const $counter = $('<span class="status-counter"></span>').css({
+                'font-size': '11px',
+                'color': '#aaa'
+            }).text(150 - currentText.length);
+
+            $wrapper.append($input, $counter);
+            $status.empty().append($wrapper);
+            $input.focus();
+
+            // Обновляем счётчик при вводе
+            $input.on("input", function() {
+                const remaining = 150 - $(this).val().length;
+                $counter.text(remaining);
+            });
+
+            // Сохранение по Enter
+            $input.on("keypress", function(e) {
+                if (e.which === 13) {
+                    saveStatus($(this).val().trim());
+                }
+            });
+
+            // Escape → отмена
+            $input.on("keydown", function(e) {
+                if (e.key === "Escape") {
+                    cancelEdit();
+                }
+            });
+
+            // Сохранение по потере фокуса
+            $input.on("blur", function() {
+                saveStatus($(this).val().trim());
+            });
+
+            function saveStatus(newStatus) {
+                $.post("/update_status", { status: newStatus }, function() {
+                    $status.text(newStatus || "<Пусто>");
+                    $link.show();
+                    showToast("Статус обновлён");
+                }).fail(function() {
+                    showToast("Ошибка при сохранении статуса");
+                    $status.text(currentText || "<Пусто>");
+                    $link.show();
+                });
+            }
+
+            function cancelEdit() {
+                $status.text(currentText || "<Пусто>");
+                $link.show();
+            }
+        });
+    });
+    </script>
+
+    {% if current_user == user %}
+    <script>
+      const avatar = document.getElementById("avatarPreview");
+      const input = document.getElementById("avatarInput");
+      const modal = document.getElementById("avatarModal");
+      const cropImage = document.getElementById("cropImage");
+      const cropSave = document.getElementById("cropSave");
+      const cropCancel = document.getElementById("cropCancel");
+      let cropper;
+
+      // 📌 Клик по аватарке → выбор файла
+      avatar.addEventListener("click", () => {
+        input?.click();
+      });
+
+      // 📌 Загрузка и открытие cropper
+      input?.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          cropImage.src = ev.target.result;
+          modal.style.display = "flex";
+
+          if (cropper) cropper.destroy();
+          cropper = new Cropper(cropImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // 📌 Сохранение обрезанной картинки
+      cropSave.addEventListener("click", () => {
+        cropper.getCroppedCanvas({ width: 300, height: 300 })
+          .toBlob((blob) => {
+            const formData = new FormData();
+            formData.append("avatar", blob, "avatar.png");
+
+            fetch("/update_avatar", {
+              method: "POST",
+              body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+              if (data.url) {
+                avatar.src = data.url + "?v=" + Date.now(); // сброс кэша
+                showToast("Аватар обновлён");
+              } else {
+                showToast("Ошибка загрузки", 3000);
+              }
+              modal.style.display = "none";
+              cropper.destroy();
+            });
+          }, "image/png");
+      });
+
+      cropCancel.addEventListener("click", () => {
+        modal.style.display = "none";
+        if (cropper) cropper.destroy();
+      });
+    </script>
+    {% endif %}
+
+
+
+
 </body>
 </html>

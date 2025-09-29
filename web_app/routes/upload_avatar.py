@@ -17,12 +17,10 @@ def upload_avatar():
     if not file:
         return jsonify({"error": "No file"}), 400
 
-    # сохраняем строго с именем code.png
     filename = f"{secure_filename(code)}.png"
     filepath = os.path.join(UPLOAD_FOLDER, filename)
 
     file.save(filepath)
 
-    # генерируем URL для фронта
     url = url_for("static", filename=f"uploads/avatars/{filename}", _external=False)
     return jsonify({"url": url})

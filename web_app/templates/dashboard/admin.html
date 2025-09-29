@@ -4,6 +4,7 @@
         <button id="adminUsers">Пользователи</button>
         <button id="adminLinks">Ссылки для регистрации</button>
         <button id="adminAchiv">Ачивки</button>
+        <button id="adminRating">Баллы</button> <!-- ✅ Новый пункт -->
     </div>
     <div class="admin_main"></div>
     <script>
@@ -12,14 +13,16 @@
             "#adminGroups": "/admin_groups",
             "#adminUsers": "/admin_profiles",
             "#adminLinks": "/admin_links",
-            "#adminAchiv": "/admin_achivs"
+            "#adminAchiv": "/admin_achivs",
+            "#adminRating": "/admin_rating" // ✅ Новый маршрут
         };
 
         window.adminMap = window.adminMap || {
             "groups":   { button: "#adminGroups",   url: window.adminRoutes["#adminGroups"] },
             "users":    { button: "#adminUsers",    url: window.adminRoutes["#adminUsers"] },
             "links":    { button: "#adminLinks",    url: window.adminRoutes["#adminLinks"] },
-            "achivs": { button: "#adminAchiv", url: window.adminRoutes["#adminAchiv"] }
+            "achivs":   { button: "#adminAchiv",    url: window.adminRoutes["#adminAchiv"] },
+            "rating":   { button: "#adminRating",   url: window.adminRoutes["#adminRating"] } // ✅ Новый ключ
         };
 
         // Функция загрузки контента с проверкой текущего URL
@@ -35,7 +38,7 @@
             });
         }
 
-        // Делегирование кликов на контейнер, который не перезаписывается
+        // Делегирование кликов
         $(".main").on("click", ".admin_btns button", function() {
             const buttonId = "#" + this.id;
             const url = window.adminRoutes[buttonId];
@@ -63,7 +66,7 @@
         $(document).ready(function() {
             let select = getQueryParam("select") || "groups";
 
-            // Устанавливаем дефолтный параметр в URL, если его нет
+            // Устанавливаем дефолтный параметр в URL
             if (!getQueryParam("select")) {
                 const params = new URLSearchParams(window.location.search);
                 params.set("select", select);
@@ -79,7 +82,4 @@
             }
         });
     </script>
-
-
-
 </div>

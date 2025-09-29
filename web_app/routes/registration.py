@@ -57,7 +57,6 @@ def reg_page():
             flash("Ошибка: пользователь уже существует")
             return redirect(url_for("reg_page"))
 
-    # GET-запрос
     if not is_login():
         try:
             group = RegistrationLinks.get(RegistrationLinks.code == code).group

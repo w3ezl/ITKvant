@@ -8,3 +8,6 @@ def is_login():
 
 def current_user():
     return Users.get(Users.login == session["login"])
+
+def is_admin():
+    return Users.get(Users.login == session["login"]).is_teacher
