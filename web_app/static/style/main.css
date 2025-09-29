@@ -403,6 +403,7 @@ button {
 
 .header_profile img {
 	width: 36px;
+	height: 36px;
 	border-radius: 50%;
 	margin: 3px;
 }
@@ -636,6 +637,7 @@ button {
 
 .rating_table .profile img {
 	width: 40px;
+	height: 40px;
 	margin: 5px;
 	border-radius: 50%;
 }
@@ -703,6 +705,7 @@ path#rating3 {
 
 .main_profile .flex_container img {
 	width: 80px;
+	height: 80px;
 	margin-right: 20px;
 	border-radius: 50%;
 }

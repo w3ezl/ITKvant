@@ -1,8 +1,8 @@
 from peewee import CharField, ForeignKeyField, IntegerField, DateTimeField
 
 from .base import BaseModel
-from web_app.models.project import Projects
-from web_app.models.user import Users
+from .project import Projects
+from .user import Users
 
 
 class Tasks(BaseModel):

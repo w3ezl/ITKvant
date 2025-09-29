@@ -1,8 +1,8 @@
 from peewee import ForeignKeyField
 
 from .base import BaseModel
-from web_app.models.achievement import Achievements
-from web_app.models.user import Users
+from .achievement import Achievements
+from .user import Users
 
 
 class UserAchievements(BaseModel):

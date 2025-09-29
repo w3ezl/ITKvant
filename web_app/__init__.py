@@ -36,6 +36,9 @@ from .models import *
 from .routes import *
 from .helpers import *
 
+tables = [Users, Groups, Projects, Achievements, RegistrationLinks, Tasks, UserAchievements, UserTasks]
+db.create_tables(tables, safe=True)
+
 def init_db():
     if db.is_closed():
         db.connect()

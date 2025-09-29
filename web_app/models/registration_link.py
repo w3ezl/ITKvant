@@ -1,7 +1,7 @@
 from peewee import CharField, ForeignKeyField
 
 from .base import BaseModel
-from web_app.models.group import Groups
+from .group import Groups
 
 
 class RegistrationLinks(BaseModel):

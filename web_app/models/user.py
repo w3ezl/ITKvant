@@ -1,4 +1,4 @@
-from peewee import CharField, IntegerField, BooleanField, ForeignKeyField
+from peewee import CharField, IntegerField, BooleanField, DeferredForeignKey
 
 from .base import BaseModel
 
@@ -15,5 +15,7 @@ class Users(BaseModel):
     is_teacher = BooleanField(default=False)
     rating_points = IntegerField(default=0)
     status = CharField(null=True, max_length=150)
+    group = DeferredForeignKey('Groups', backref='students', null=True)
+    project = DeferredForeignKey('Projects', backref='participants', null=True)
 
 

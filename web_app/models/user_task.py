@@ -1,8 +1,8 @@
 from peewee import ForeignKeyField
 
 from .base import BaseModel
-from web_app.models.task import Tasks
-from web_app.models.user import Users
+from .task import Tasks
+from .user import Users
 
 
 class UserTasks(BaseModel):
