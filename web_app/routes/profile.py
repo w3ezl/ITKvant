@@ -10,7 +10,7 @@ def get_profile(id):
         Users
         .select()
         .where(Users.is_teacher == False)
-        .order_by(Users.rating_points.desc(), Users.id.asc())
+        .order_by(Users.rating_points.desc(), Users.created_at.asc())
     )
 
     place = None

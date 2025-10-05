@@ -14,7 +14,12 @@ def dashboard_page():
 def rating_table():
     if not is_login():
         return redirect(url_for("auth_page"))
-    students = Users.select().where(Users.is_teacher == False).order_by(Users.rating_points.desc())
+    students = (
+        Users
+        .select()
+        .where(Users.is_teacher == False)
+        .order_by(Users.rating_points.desc(), Users.created_at.asc())
+    )
     return render_template("dashboard/rating_table.html", students=students)
 
 @app.route("/admin", methods=["GET"])
