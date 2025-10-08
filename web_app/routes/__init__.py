@@ -12,3 +12,4 @@ import web_app.routes.achiv
 import web_app.routes.update_status
 import web_app.routes.update_avatar
 import web_app.routes.admin_rating
+import web_app.routes.quest

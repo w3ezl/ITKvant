@@ -1,5 +1,4 @@
-from flask import request, url_for, render_template
-from werkzeug.utils import redirect
+from flask import request, url_for, render_template, redirect, abort
 
 from web_app import app, Groups, Users
 from web_app.routes._check_auth import is_login, current_user
@@ -21,7 +20,7 @@ def form_group():
     if not is_login():
         return redirect(url_for("auth_page"))
     if not current_user().is_teacher:
-        return 404
+        abort(404)
     if request.args.get("id"):
         group = Groups.get(Groups.id == int(request.args.get("id")))
     else:
@@ -34,7 +33,7 @@ def create_group():
     if not is_login():
         return redirect(url_for("auth_page"))
     if not current_user().is_teacher:
-        return 404
+        abort(404)
     name = request.form.get("name")
     year = int(request.form.get("year"))
     teacher_id = int(request.form.get("teacher"))

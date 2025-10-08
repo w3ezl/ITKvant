@@ -1,8 +1,15 @@
+{% if user.login == "tatyago" %}
+<!-- 1. Яцфвжгеэзб (ROT21) -->
+{% elif user.login == "w3ezl" %}
+<!-- 2. Седпужцпно (ROT5) -->
+{% elif user == current_user %}
+<!-- 3. Янрище (ROT9) -->
+{% endif %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ current_user.last_name }} {{ current_user.first_name }}</title>
+    <title>{{ user.last_name }} {{ user.first_name }}</title>
     <link rel="stylesheet" type="text/css" href="{{ static_versioned('style/main.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="icon" type="image/png" href="{{ static_versioned('img/favicon.png') }}" />

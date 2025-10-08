@@ -1,6 +1,6 @@
 import os
 
-from flask import request, url_for, render_template
+from flask import request, url_for, render_template, abort
 from werkzeug.utils import redirect
 
 from web_app import app, Groups, Users, Achievements
@@ -18,7 +18,7 @@ def form_achiv():
     if not is_login():
         return redirect(url_for("auth_page"))
     if not current_user().is_teacher:
-        return 404
+        abort(403)
     if request.args.get("id"):
         achiv = Achievements.get(Achievements.id == int(request.args.get("id")))
     else:
@@ -30,7 +30,7 @@ def create_achiv():
     if not is_login():
         return redirect(url_for("auth_page"))
     if not current_user().is_teacher:
-        return 404
+        abort(403)
 
     title = request.form.get("title")
     desc = request.form.get("desc")

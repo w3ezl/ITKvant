@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, abort
 
 from web_app import app
 from web_app.routes._check_auth import is_login, current_user
@@ -12,4 +12,4 @@ def update_status():
         user.status = status
         user.save()
         return jsonify({'message': 'OK'})
-    return 403
+    abort(403)

@@ -1,4 +1,4 @@
-from flask import request, url_for, render_template
+from flask import request, url_for, render_template, abort
 from werkzeug.utils import redirect
 
 from web_app import app, Groups, Users, RegistrationLinks
@@ -11,7 +11,7 @@ def form_reg_link():
     if not is_login():
         return redirect(url_for("auth_page"))
     if not current_user().is_teacher:
-        return 404
+        abort(403)
     groups = Groups.select()
     return render_template("reg_link_form.html", groups=groups)
 
@@ -20,7 +20,7 @@ def create_reg_link():
     if not is_login():
         return redirect(url_for("auth_page"))
     if not current_user().is_teacher:
-        return 404
+        abort(403)
     count = int(request.form.get("count"))
     group_id = int(request.form.get("group"))
     for i in range(count):
