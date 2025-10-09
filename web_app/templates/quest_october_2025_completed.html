@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Секретное задание!</title>
+    <link rel="stylesheet" type="text/css" href="{{ static_versioned('style/main.css') }}">
+    <link rel="icon" type="image/png" href="{{ static_versioned('img/favicon.png') }}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="header_btns main_menu_btns">
+            <a href="/dashboard">Панель управления</a>
+        </div>
+        <a href="/profile/{{ current_user.id }}">
+            <div class="header_profile">
+                <img src="{{ static_versioned('uploads/avatars/'+current_user.id|string+'.png') }}">
+                <p>
+                    {{ current_user.last_name }}<br>
+                    {{ current_user.first_name }}
+                </p>
+            </div>
+        </a>
+        <div class="profile_menu">
+            <a href="/logout">Выйти</a>
+        </div>
+
+        <script>
+        $(function() {
+            let $profile = $(".header_profile");
+            let $menu = $(".profile_menu");
+            let timeout;
+
+            function showMenu() {
+                clearTimeout(timeout);
+                $menu.stop(true, true).fadeIn(200);
+            }
+
+            function hideMenu() {
+                timeout = setTimeout(function() {
+                    $menu.stop(true, true).fadeOut(200);
+                }, 200);
+            }
+
+            $profile.on("mouseenter", showMenu);
+            $profile.on("mouseleave", hideMenu);
+
+            $menu.on("mouseenter", showMenu);
+            $menu.on("mouseleave", hideMenu);
+        });
+        </script>
+    </div>
+    <div class="quest_block">
+        <h2>Notae Caesarianae</h2>
+        <p>
+            Поздравляем, квест пройден! За это вы получили +5 баллов к рейтингу)
+        </p>
+        
+    </div>
+</body>
+</html>

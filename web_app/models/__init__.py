@@ -11,6 +11,7 @@ from .task import Tasks
 from .user_achievement import UserAchievements
 from .user_task import UserTasks
 from .registration_link import RegistrationLinks
+from .user_quest import UserQuests
 
 __all__ = [
     "BaseModel",
@@ -21,5 +22,6 @@ __all__ = [
     "RegistrationLinks",
     "Tasks",
     "UserAchievements",
-    "UserTasks"
+    "UserTasks",
+    "UserQuests"
 ]

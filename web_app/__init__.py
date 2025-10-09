@@ -36,7 +36,7 @@ from .models import *
 from .routes import *
 from .helpers import *
 
-tables = [Users, Groups, Projects, Achievements, RegistrationLinks, Tasks, UserAchievements, UserTasks]
+tables = [Users, Groups, Projects, Achievements, RegistrationLinks, Tasks, UserAchievements, UserTasks, UserQuests]
 db.create_tables(tables, safe=True)
 
 def init_db():
