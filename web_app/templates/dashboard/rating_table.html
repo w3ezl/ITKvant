@@ -4,7 +4,7 @@
 		<tr>
 			<th>Место</th>
 			<th>Профиль</th>
-			<th>Группа</th>
+			<th class="none_display_m">Группа</th>
 			<th>Баллы рейтинга</th>
 		</tr>
 		{% for user in students %}
@@ -22,13 +22,13 @@
 					<div class="profile">
 						<img src="{{ static_versioned('uploads/avatars/'+user.id|string+'.png') }}" id="rating{{ loop.index }}">
 						<p id="rating{{ loop.index }}">
-							{{ user.last_name }}<br>
+							{{ user.last_name }}<br class="none_display_m">
 							{{ user.first_name }}
 						</p>
 					</div>
 				</a>
 			</td>
-			<td>{{ user.group.name if user.group else "—" }}</td>
+			<td class="none_display_m">{{ user.group.name if user.group else "—" }}</td>
 			<td>{{ user.rating_points }}</td>
 		</tr>
 		{% else %}
