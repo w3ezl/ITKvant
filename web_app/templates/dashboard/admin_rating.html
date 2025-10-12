@@ -37,7 +37,7 @@ $(function(){
 
         $.get(`/admin_group_students?group_id=${groupId}`, function(data){
             data.students.forEach(student => {
-                $("#studentSelect").append(`<option value="${student.id}">${student.first_name} ${student.last_name}</option>`);
+                $("#studentSelect").append(`<option value="${student.id}">${student.last_name} ${student.first_name}</option>`);
             });
         });
     });
