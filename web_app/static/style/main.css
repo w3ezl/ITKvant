@@ -23,6 +23,13 @@ button {
 	font-family: "JetBrains Mono";
 }
 
+h1 small {
+	font-size: 14px;
+	color: #fff8;
+	font-weight: normal;
+	margin-left: 20px;
+}
+
 .error_code {
 	position: absolute;
 	font-size: 80px;
@@ -462,7 +469,7 @@ button {
 	left: calc(50% - 450px);
 }
 
-.admin_panel .header_btns {
+.admin_panel .header_btns, .rating_tabs {
 	position: relative;
 	height: 50px;
 }
@@ -1107,6 +1114,7 @@ path#rating3 {
 	.main_profile .flex_container .avatar, .main_profile .flex_container .your_avatar {
 		width: 100px;
 		height: 100px;
+		margin-right: 0;
 	}
 
 	.flex_container .info {

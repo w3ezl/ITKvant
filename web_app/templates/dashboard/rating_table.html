@@ -1,5 +1,9 @@
+<div id="rating_archive_buttons" class="rating_tabs header_btns">
+	<button class="rating_tab active" data-target="current">Сейчас</button>
+</div>
+
 <div class="rating_table">
-	<h1>Рейтинг</h1>
+	<h1>Рейтинг<small>Сейчас</small></h1>
 	<table>
 		<tr>
 			<th>Место</th>
@@ -38,3 +42,49 @@
 		{% endfor %}
 	</table>
 </div>
+
+<script>
+$(document).ready(function() {
+    const container = $("#rating_archive_buttons");
+    const tableDiv = $(".rating_table");
+
+    if (!container.data("loaded")) {
+        container.data("loaded", true);
+
+        let currentPage = new URLSearchParams(window.location.search).get("page") || "current";
+
+        $.getJSON("/rating_list", function(files) {
+            files.forEach(file => {
+                const name = file.replace(".json", "");
+                container.append(`<button class="rating_tab" data-target="${name}">${name}</button>`);
+            });
+
+            setActive(currentPage);
+            loadTable(currentPage);
+
+            $(".rating_tab").off("click").on("click", function() {
+                const target = $(this).data("target");
+                setActive(target);
+                loadTable(target);
+
+                const url = target === "current" ? "?page=rating_table" : `?page=${target}`;
+                history.pushState({}, "", url);
+            });
+        });
+    }
+
+    function setActive(name) {
+        $(".rating_tab").removeClass("active");
+        $(`.rating_tab[data-target="${name}"]`).addClass("active");
+    }
+
+    function loadTable(name) {
+        if (name === "current") {
+            tableDiv.load("/rating_table .rating_table > *");
+        } else {
+            const encoded = encodeURIComponent(name);
+			tableDiv.load(`/rating_archive/${encoded} .rating_table > *`);
+        }
+    }
+});
+</script>
